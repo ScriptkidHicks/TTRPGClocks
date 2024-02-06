@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import dotevn from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
+import { memberRouter } from "./routes/members";
 
 dotevn.config();
 mongoose.set("strictQuery", false);
@@ -25,6 +26,8 @@ app.use(
     origin: process.env.ORIGIN,
   })
 );
+
+app.use("/members", memberRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to Express & TypeScript Server");
