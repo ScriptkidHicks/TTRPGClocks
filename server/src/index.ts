@@ -21,15 +21,13 @@ db.on("open", () => {
 
 app.use(express.json());
 
-app.use(
-  cors({
-    origin: process.env.ORIGIN,
-  })
-);
+app.use(cors({ origin: process.env.ORIGIN }));
 
 app.use("/members", memberRouter);
 
 app.get("/", (req: Request, res: Response) => {
+  const host = req.get("host");
+  console.log(host);
   res.send("Welcome to Express & TypeScript Server");
 });
 

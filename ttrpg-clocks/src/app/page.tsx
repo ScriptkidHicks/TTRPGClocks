@@ -4,21 +4,30 @@ import styles from "./page.module.css";
 import GMLogo from "../Images/GMTools.png";
 import { BaseInterfaceButton } from "@/CommonElements/Buttons";
 import { useState } from "react";
-import { match } from "assert";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export default function Home() {
   async function loginQuery() {
     const loginAsk = {
-      method: "POST",
+      method: "GET",
       headers: {
         Accept: "application/JSON",
         "Content-Type": "application/JSON",
       },
-      body: JSON.stringify({
-        name: username,
-        password: password,
-      }),
+      // body: JSON.stringify({
+      //   name: username,
+      //   password: password,
+      //   email: email,
+      // }),
     };
+
+    const membersEndpoint = process.env.NEXT_PUBLIC_MEMBERS_ENDPOINT;
+
+    console.log(membersEndpoint);
+
+    fetch(membersEndpoint, loginAsk);
   }
 
   const [username, setUsername] = useState<string>("");
@@ -59,7 +68,6 @@ export default function Home() {
       <BaseInterfaceButton
         buttonText={createAccount ? "create" : "login"}
         buttonFunction={() => {
-          console.log("redirecting");
           loginQuery();
         }}
       />
