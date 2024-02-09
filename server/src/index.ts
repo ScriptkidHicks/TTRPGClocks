@@ -6,6 +6,10 @@ import { memberRouter } from "./routes/members";
 
 dotevn.config();
 mongoose.set("strictQuery", false);
+const mongodbConnection = process.env.MONGODB_CONNECT;
+if (typeof mongodbConnection === "string") {
+  mongoose.connect(mongodbConnection);
+}
 
 const app = express();
 const port = process.env.Port;

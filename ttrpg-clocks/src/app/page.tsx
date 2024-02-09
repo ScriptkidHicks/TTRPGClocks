@@ -9,18 +9,19 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export default function Home() {
-  async function loginQuery() {
+  async function loginQuery(isCreate: boolean) {
     const loginAsk = {
-      method: "GET",
+      method: "POST",
       headers: {
         Accept: "application/JSON",
         "Content-Type": "application/JSON",
       },
-      // body: JSON.stringify({
-      //   name: username,
-      //   password: password,
-      //   email: email,
-      // }),
+      body: JSON.stringify({
+        name: username,
+        password: password,
+        email: email,
+        isCreate: isCreate,
+      }),
     };
 
     const membersEndpoint = process.env.NEXT_PUBLIC_MEMBERS_ENDPOINT;
@@ -47,15 +48,17 @@ export default function Home() {
           }
         }}
       />
-      <input
-        type="text"
-        placeholder="Email"
-        onChange={(event) => {
-          if (event.target.value != null) {
-            setEmail(event.target.value);
-          }
-        }}
-      />
+      {createAccount && (
+        <input
+          type="text"
+          placeholder="Email"
+          onChange={(event) => {
+            if (event.target.value != null) {
+              setEmail(event.target.value);
+            }
+          }}
+        />
+      )}
       <input
         type="text"
         placeholder="Password"
@@ -68,7 +71,7 @@ export default function Home() {
       <BaseInterfaceButton
         buttonText={createAccount ? "create" : "login"}
         buttonFunction={() => {
-          loginQuery();
+          loginQuery(createAccount);
         }}
       />
       <BaseInterfaceButton
