@@ -1,50 +1,23 @@
+"use client";
+
 import { BaseInterfaceButton } from "@/CommonElements/Buttons";
-import { getCookie, deleteCookie, setCookie } from "cookies-next";
+import { getCookie, setCookie } from "cookies-next";
 import { useEffect, useState } from "react";
-import styles from "./page.module.css";
-import GMLogo from "../Images/GMTools.png";
+import GMLogo from "../../Images/GMTools.png";
 import { checkLoginState } from "@/helpers/fetchHelpers";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+import styles from "../page.module.css";
 
 export default function LoginPage() {
+  const router = useRouter();
   useEffect(() => {
     checkLoginState(
       function () {
-        redirect("/landing");
+        router.push("/landing");
       },
       function () {}
     );
   });
-
-  function verifyCookie() {
-    if (process.env.NEXT_PUBLIC_COOKIENAME != null) {
-      const localCookie = getCookie(process.env.NEXT_PUBLIC_COOKIENAME);
-      if (!localCookie) {
-        // there is no sin in not being logged in
-        return;
-      }
-
-      if (process.env.NEXT_PUBLIC_VERIFY_COOKIE_ENDPOINT != null) {
-        const validationRequest = {
-          method: "GET",
-          headers: {
-            Accept: "application/JSON",
-            "content-type": "application/JSON",
-            authorization: `Bearer ${localCookie}`,
-          },
-        };
-
-        console.log(
-          "fetching on " + process.env.NEXT_PUBLIC_VERIFY_COOKIE_ENDPOINT
-        );
-
-        fetch(
-          process.env.NEXT_PUBLIC_VERIFY_COOKIE_ENDPOINT,
-          validationRequest
-        ).then(async (responsePromise) => {});
-      }
-    }
-  }
 
   function validateInput(): boolean {
     const emailRegex = RegExp(
@@ -98,6 +71,7 @@ export default function LoginPage() {
               secure: true,
               maxAge: 7,
             });
+            router.push("/landing");
           }
         } else {
           const errorMessage = await responsePromise.text();
@@ -159,12 +133,6 @@ export default function LoginPage() {
             ? "Already Have an Account?"
             : "Need to Create an Account?"
         }
-      />
-      <BaseInterfaceButton
-        buttonFunction={() => {
-          verifyCookie();
-        }}
-        buttonText={"verify test"}
       />
     </main>
   );

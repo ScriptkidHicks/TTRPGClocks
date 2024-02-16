@@ -40,4 +40,15 @@ async function checkLoginState(
   return loginSuccess;
 }
 
-export { checkLoginState };
+function forceLogout() {
+  if (process.env.NEXT_PUBLIC_COOKIENAME != null) {
+    console.log("it's not null");
+    console.log(process.env.NEXT_PUBLIC_COOKIENAME);
+    deleteCookie(process.env.NEXT_PUBLIC_COOKIENAME, { path: "/login" });
+    const cookie = getCookie(process.env.NEXT_PUBLIC_COOKIENAME);
+    console.log(cookie);
+  }
+  console.log("force logout occuring");
+}
+
+export { checkLoginState, forceLogout };

@@ -5,13 +5,10 @@ import jwt, { verify } from "jsonwebtoken";
 
 const memberRouter = Router();
 
-memberRouter.get("/", async (req, res) => {
-  console.log("base members route has been touched");
-});
+memberRouter.get("/", async (req, res) => {});
 
 //create or log in a member
 memberRouter.post("/", async (req, res) => {
-  console.log("touching members endpoint");
   const isCreate = req.body.isCreate;
   if (isCreate == null) {
     res.status(400);
@@ -49,8 +46,6 @@ memberRouter.post("/", async (req, res) => {
 
     const salt = await bcrypt.genSalt(Number(process.env.ITERATION_COUNT));
     const hashedPassword = bcrypt.hashSync(password, salt);
-    console.log(password);
-    console.log(hashedPassword);
     const newMember = new Member({
       name: name,
       hashedPassword: hashedPassword,
@@ -78,9 +73,6 @@ memberRouter.post("/", async (req, res) => {
       res.send();
       return;
     } else {
-      console.log(password);
-      console.log(foundMember.hashedPassword);
-      console.log(bcrypt.compareSync(password, foundMember.hashedPassword));
       if (bcrypt.compareSync(password, foundMember.hashedPassword)) {
         res.status(200);
         if (process.env.JWT_SECRET != null) {
@@ -128,7 +120,6 @@ memberRouter.get("/verify", async (req, res) => {
       }
 
       //we've found a matching member. This person is logged in.
-      console.log("sending 200");
       res.status(200);
       res.send();
       return;
