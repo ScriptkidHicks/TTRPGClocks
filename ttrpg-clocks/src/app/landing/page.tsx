@@ -4,22 +4,22 @@ import { forceLogout } from "@/helpers/fetchHelpers";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { checkLoginState } from "@/helpers/fetchHelpers";
+import { StaticImagePageBackground } from "../../CommonElements/BackgroundsAndFrames/PageBodies";
+import ChurchImage from "../../Images/Backgrounds/Church.png";
 
 function LandingPage() {
   const router = useRouter();
 
   useEffect(() => {
     checkLoginState(
-      function () {
-        router.push("/landing");
-      },
+      function () {},
       function () {
         router.push("/login");
       }
     );
-  });
+  }, []);
   return (
-    <div>
+    <StaticImagePageBackground backgroundimage={ChurchImage}>
       <h1>Welcome to the landing page</h1>
       <button
         onClick={() => {
@@ -29,7 +29,7 @@ function LandingPage() {
       >
         force logout
       </button>
-    </div>
+    </StaticImagePageBackground>
   );
 }
 

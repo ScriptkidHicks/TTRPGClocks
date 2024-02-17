@@ -1,12 +1,12 @@
 "use client";
 
 import { BaseInterfaceButton } from "@/CommonElements/Buttons";
-import { getCookie, setCookie } from "cookies-next";
 import { useEffect, useState } from "react";
 import GMLogo from "../../Images/GMTools.png";
 import { checkLoginState } from "@/helpers/fetchHelpers";
 import { useRouter } from "next/navigation";
 import styles from "../page.module.css";
+import { setCookie } from "cookies-next";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -17,7 +17,7 @@ export default function LoginPage() {
       },
       function () {}
     );
-  });
+  }, []);
 
   function validateInput(): boolean {
     const emailRegex = RegExp(
