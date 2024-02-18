@@ -68,8 +68,7 @@ export default function LoginPage() {
           if (process.env.NEXT_PUBLIC_COOKIENAME != null) {
             setCookie(process.env.NEXT_PUBLIC_COOKIENAME, responseJson["jwt"], {
               sameSite: false,
-              secure: true,
-              maxAge: 7,
+              secure: false,
             });
             router.push("/landing");
           }

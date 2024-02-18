@@ -92,11 +92,13 @@ memberRouter.post("/", async (req, res) => {
 
 //verify a cookie
 memberRouter.get("/verify", async (req, res) => {
+  console.log("verify route");
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer") &&
     process.env.JWT_SECRET != null
   ) {
+    console.log("we have correct bearers");
     try {
       const token = req.headers.authorization.split(" ")[1];
       const decoded = jwt.verify(
@@ -104,16 +106,18 @@ memberRouter.get("/verify", async (req, res) => {
         process.env.JWT_SECRET
       ) as jwt.JwtPayload;
 
+      console.log("decoded " + decoded);
       if (!decoded) {
         res.status(400);
         res.send("Invalid Token");
         return;
       }
 
-      const foundMember = Member.findOne({ name: decoded.username }).select(
-        "-hashedPassword"
-      );
-      if (!foundMember) {
+      console.log("name: " + decoded.username);
+      const foundMember = await Member.findOne({
+        name: decoded.username,
+      }).select("-hashedPassword");
+      if (foundMember == null) {
         res.status(400);
         res.send("Invalid Token. User does not exist");
         return;

@@ -1,4 +1,4 @@
-import { getCookie, deleteCookie, setCookie } from "cookies-next";
+import { getCookie, deleteCookie, setCookie, getCookies } from "cookies-next";
 
 async function checkLoginState(
   successFunction: Function,
@@ -9,9 +9,12 @@ async function checkLoginState(
     process.env.NEXT_PUBLIC_COOKIENAME != null &&
     process.env.NEXT_PUBLIC_VERIFY_COOKIE_ENDPOINT != null
   ) {
+    console.log(process.env.NEXT_PUBLIC_COOKIENAME);
+    const cookies = getCookies();
+    console.log(cookies);
     const localCookie = getCookie(process.env.NEXT_PUBLIC_COOKIENAME);
+    console.log("local cooki " + localCookie);
     if (localCookie) {
-      console.log(localCookie);
       const validationRequest = {
         method: "GET",
         headers: {
@@ -25,17 +28,20 @@ async function checkLoginState(
         process.env.NEXT_PUBLIC_VERIFY_COOKIE_ENDPOINT,
         validationRequest
       ).then(async (responsePromise) => {
+        console.log("response promise: " + responsePromise.status);
         if (responsePromise.status == 200) {
           //successful, invoke the success function
           loginSuccess = true;
         } else {
           // ooooooooo, someone has a bad cookie. You don't get to keep that.
+          console.log("validate deleting cookie");
           deleteCookie(process.env.NEXT_PUBLIC_COOKIENAME);
         }
       });
     }
   }
 
+  console.log("login success: " + loginSuccess);
   loginSuccess ? successFunction() : failureFunction();
   return loginSuccess;
 }
